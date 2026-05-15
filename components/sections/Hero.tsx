@@ -1,0 +1,120 @@
+"use client";
+
+import { motion } from "framer-motion";
+
+const STATEMENT = ["Stop", "being", "underestimated."];
+
+export function Hero() {
+  return (
+    <section
+      id="hero"
+      className="relative min-h-screen flex flex-col items-center justify-center px-6"
+    >
+      <div className="absolute top-6 left-6 z-30 flex items-center gap-2">
+        <span className="inline-block w-1.5 h-1.5 rounded-full bg-[var(--amber)] shadow-[0_0_10px_rgba(232,154,75,0.9)]" />
+        <span className="font-mono text-[11px] tracking-[0.28em] uppercase text-text-soft">
+          flatwhite
+        </span>
+      </div>
+
+      <div className="w-full max-w-[1100px] flex flex-col items-center text-center mt-20">
+        <motion.span
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.2, delay: 0.2 }}
+          className="mb-12 inline-flex items-center gap-2 px-3 py-1 rounded-full font-mono text-[10px] tracking-[0.28em] uppercase text-text-soft border border-[var(--edge)] backdrop-blur-md bg-[var(--glass)]"
+        >
+          <span className="w-1 h-1 rounded-full bg-[var(--amber)]" />
+          Experiment · An agent inside Claude
+        </motion.span>
+
+        <h1
+          className="text-text font-light leading-[0.95]"
+          style={{
+            fontSize: "clamp(56px, 9vw, 140px)",
+            letterSpacing: "-0.04em",
+          }}
+        >
+          {STATEMENT.map((word, i) => (
+            <motion.span
+              key={i}
+              initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              transition={{
+                duration: 0.9,
+                delay: 0.5 + i * 0.18,
+                ease: [0.32, 0.72, 0, 1],
+              }}
+              className="inline-block mr-[0.25em] last:mr-0"
+            >
+              {word}
+            </motion.span>
+          ))}
+        </h1>
+
+        <motion.p
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 1.4, ease: [0.32, 0.72, 0, 1] }}
+          className="mt-10 text-text-soft max-w-[520px]"
+          style={{
+            fontSize: "clamp(15px, 1.3vw, 18px)",
+            lineHeight: 1.55,
+            letterSpacing: "-0.005em",
+          }}
+        >
+          An agent that lives inside Claude. Every morning, while you work, it
+          reads where you stand in the market — and tells you the one move
+          worth making today.
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 1.9, ease: [0.32, 0.72, 0, 1] }}
+          className="mt-14 flex flex-col items-center gap-4"
+        >
+          <a
+            href="https://www.linkedin.com/in/tania-bezancon/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex items-center gap-3 rounded-full bg-text text-deep pl-6 pr-2 py-2 font-mono text-[11px] tracking-[0.2em] uppercase hover:bg-[var(--cream)] transition-colors"
+            style={{
+              boxShadow:
+                "0 8px 32px rgba(0,0,0,0.35), 0 0 0 1px rgba(249,238,212,0.1)",
+            }}
+          >
+            Let&apos;s discuss
+            <span
+              className="inline-flex items-center justify-center w-8 h-8 rounded-full"
+              style={{ background: "rgba(29,15,6,0.08)" }}
+            >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M5 12H19M19 12L12 5M19 12L12 19"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
+          </a>
+          <span className="font-mono text-[10px] tracking-[0.28em] uppercase text-text-faint">
+            Experiment · An agent inside Claude
+          </span>
+        </motion.div>
+      </div>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2.6, duration: 1.4 }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 font-mono text-[10px] tracking-[0.32em] uppercase text-text-dim"
+      >
+        <span>Scroll</span>
+        <span className="w-px h-8 bg-gradient-to-b from-[var(--text-dim)] to-transparent" />
+      </motion.div>
+    </section>
+  );
+}
