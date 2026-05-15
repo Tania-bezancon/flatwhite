@@ -1,64 +1,19 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useLang } from "@/lib/lang";
+import { copy } from "@/lib/copy";
 
-type Capability = {
-  code: string;
-  title: string;
-  desc: string;
-  icon: string;
-  hasMock?: boolean;
-};
-
-const CAPABILITIES: Capability[] = [
-  {
-    code: "01",
-    title: "Read the profile",
-    desc: "We map your skills, your work, your real signal — the version of you the market should actually see.",
-    icon: "profile",
-  },
-  {
-    code: "02",
-    title: "See your market",
-    desc: "Where you sit today. Where peers sit. The roles, the bands, the gap to close.",
-    icon: "market",
-  },
-  {
-    code: "03",
-    title: "Match the right jobs",
-    desc: "Curated openings from connected boards. The roles that look like you — not just keyword matches.",
-    icon: "match",
-  },
-  {
-    code: "04",
-    title: "Write the pitch",
-    desc: "For every role: a cover letter and a tailored CV. Faithful to your voice, ready to send.",
-    icon: "write",
-    hasMock: true,
-  },
-  {
-    code: "05",
-    title: "Prep the room",
-    desc: "Before each interview: questions to expect, stories to bring, the leverage to use.",
-    icon: "prep",
-  },
-  {
-    code: "06",
-    title: "Keep you sharp",
-    desc: "Every morning: what shifted in your market, the skill worth pushing, the read worth ten minutes.",
-    icon: "sharp",
-  },
-];
-
-const TIMELINE = [
-  { day: "DAY 01", label: "Profile read", desc: "Skills mapped, story drafted." },
-  { day: "DAY 04", label: "3 matches in", desc: "Roles that fit who you are." },
-  { day: "DAY 05", label: "Pitch sent", desc: "Tailored CV + cover letter." },
-  { day: "DAY 12", label: "Room prepped", desc: "Questions, stories, leverage." },
-  { day: "DAY 21", label: "Offer in", desc: "Priced where you belong." },
-];
+const ICONS = ["profile", "market", "match", "write", "prep", "sharp"] as const;
+const HAS_MOCK = [false, false, false, true, false, false];
 
 export function TheFullCircle() {
+  const { lang } = useLang();
+  const c = copy.circle;
+  const caps = c.caps[lang];
+  const tl = c.timeline;
+  const timelineSteps = tl.steps[lang];
+
   return (
     <section
       id="circle"
@@ -66,16 +21,18 @@ export function TheFullCircle() {
     >
       <div className="w-full max-w-[1200px] flex flex-col items-center">
         <motion.span
+          key={`code-${lang}`}
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 1, ease: [0.32, 0.72, 0, 1] }}
           className="block font-mono text-[10px] tracking-[0.32em] uppercase text-text-faint mb-6"
         >
-          05 · The 360
+          {c.code[lang]}
         </motion.span>
 
         <motion.h2
+          key={`h2-${lang}`}
           initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
@@ -87,11 +44,12 @@ export function TheFullCircle() {
             lineHeight: 1.05,
           }}
         >
-          Know yourself.{" "}
-          <span className="text-text-soft">Sell yourself.</span>
+          {c.statement[lang][0]}{" "}
+          <span className="text-text-soft">{c.statement[lang][1]}</span>
         </motion.h2>
 
         <motion.p
+          key={`sub-${lang}`}
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, amount: 0.3 }}
@@ -102,19 +60,18 @@ export function TheFullCircle() {
             lineHeight: 1.55,
           }}
         >
-          One operator that frames you for the market, end to end —
-          from the read of who you are, to the room you walk into.
+          {c.subline[lang]}
         </motion.p>
 
         <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-5 w-full">
-          {CAPABILITIES.map((cap, i) => (
+          {caps.map((cap, i) => (
             <CapabilityCard
-              key={cap.code}
+              key={`${lang}-${cap.code}`}
               code={cap.code}
               title={cap.title}
               desc={cap.desc}
-              icon={cap.icon}
-              hasMock={cap.hasMock}
+              icon={ICONS[i]}
+              hasMock={HAS_MOCK[i]}
               delay={i * 0.08}
             />
           ))}
@@ -123,16 +80,18 @@ export function TheFullCircle() {
         {/* Journey timeline */}
         <div className="mt-32 w-full max-w-[1100px] flex flex-col items-center">
           <motion.span
+            key={`tl-code-${lang}`}
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.9 }}
             className="font-mono text-[10px] tracking-[0.32em] uppercase text-text-faint mb-4"
           >
-            —— Your first month
+            {tl.code[lang]}
           </motion.span>
 
           <motion.h3
+            key={`tl-h3-${lang}`}
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
@@ -144,21 +103,24 @@ export function TheFullCircle() {
               lineHeight: 1.2,
             }}
           >
-            From hello{" "}
-            <span className="text-text-soft">to hired.</span>
+            {tl.statement[lang][0]}{" "}
+            <span className="text-text-soft">{tl.statement[lang][1]}</span>
           </motion.h3>
 
-          <Timeline />
+          <Timeline steps={timelineSteps} />
         </div>
       </div>
     </section>
   );
 }
 
-function Timeline() {
+function Timeline({
+  steps,
+}: {
+  steps: { day: string; label: string; desc: string }[];
+}) {
   return (
     <div className="relative w-full px-4">
-      {/* Static rail */}
       <div
         aria-hidden
         className="absolute top-[18px] left-[8%] right-[8%] h-px"
@@ -167,8 +129,6 @@ function Timeline() {
             "linear-gradient(90deg, transparent 0%, var(--edge-strong) 8%, var(--edge-strong) 92%, transparent 100%)",
         }}
       />
-
-      {/* Animated progress overlay */}
       <motion.div
         aria-hidden
         initial={{ scaleX: 0 }}
@@ -184,7 +144,7 @@ function Timeline() {
       />
 
       <div className="grid grid-cols-5 gap-2">
-        {TIMELINE.map((t, i) => (
+        {steps.map((t, i) => (
           <motion.div
             key={t.day}
             initial={{ opacity: 0, y: 12 }}
@@ -197,20 +157,18 @@ function Timeline() {
             }}
             className="flex flex-col items-center text-center"
           >
-            {/* Node */}
             <div className="relative w-[36px] h-[36px] flex items-center justify-center">
               <div
                 className="w-2 h-2 rounded-full"
                 style={{
-                  background: i === TIMELINE.length - 1 ? "var(--cream)" : "var(--amber)",
+                  background: i === steps.length - 1 ? "var(--cream)" : "var(--amber)",
                   boxShadow:
-                    i === TIMELINE.length - 1
+                    i === steps.length - 1
                       ? "0 0 16px var(--cream), 0 0 28px rgba(245,220,179,0.5)"
                       : "0 0 8px rgba(232,154,75,0.7)",
                 }}
               />
-              {/* Outer ring for last node */}
-              {i === TIMELINE.length - 1 && (
+              {i === steps.length - 1 && (
                 <motion.div
                   className="absolute inset-0 rounded-full border"
                   style={{ borderColor: "var(--cream)", opacity: 0.4 }}
@@ -255,11 +213,7 @@ function CapabilityCard({
       initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
-      transition={{
-        duration: 1.1,
-        delay,
-        ease: [0.32, 0.72, 0, 1],
-      }}
+      transition={{ duration: 1.1, delay, ease: [0.32, 0.72, 0, 1] }}
       whileHover={{ y: -3 }}
       className="group relative rounded-2xl p-7 backdrop-blur-[6px] flex flex-col h-full"
       style={{
@@ -293,10 +247,7 @@ function CapabilityCard({
 
       <p
         className="text-text-soft"
-        style={{
-          fontSize: "14px",
-          lineHeight: 1.55,
-        }}
+        style={{ fontSize: "14px", lineHeight: 1.55 }}
       >
         {desc}
       </p>
@@ -307,6 +258,10 @@ function CapabilityCard({
 }
 
 function CoverLetterMock() {
+  const { lang } = useLang();
+  const m = copy.circle.mock;
+  const body = m.body[lang];
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -321,13 +276,12 @@ function CoverLetterMock() {
         boxShadow: "inset 0 1px 0 rgba(249,238,212,0.10)",
       }}
     >
-      {/* Document header bar */}
       <div
         className="flex items-center justify-between px-3 py-2 border-b"
         style={{ borderColor: "var(--edge)" }}
       >
         <span className="font-mono text-[9px] tracking-[0.24em] uppercase text-text-faint">
-          → Stripe · Product Eng.
+          {m.header[lang]}
         </span>
         <span className="flex items-center gap-1 font-mono text-[9px] tracking-[0.22em] uppercase text-[var(--amber)]">
           <span
@@ -337,24 +291,21 @@ function CoverLetterMock() {
               boxShadow: "0 0 6px rgba(232,154,75,0.8)",
             }}
           />
-          Generated
+          {m.generated[lang]}
         </span>
       </div>
-      {/* Document body */}
       <div className="px-3 py-3 relative">
         <p
           className="text-text-soft text-[11px] leading-[1.55] italic"
           style={{ fontFamily: "Georgia, serif" }}
         >
-          Hi Stripe team,
+          {body[0]}
           <br />
           <br />
-          I&apos;ve spent four years shipping AI products at AWS — most
-          recently the inference pipeline behind Bedrock&apos;s
-          <span className="text-text">{" "}agentic tier</span>. What pulls
-          me to your...
+          {body[1]}{" "}
+          <span className="text-text">{body[2]}</span>
+          {body[3]}
         </p>
-        {/* Fade out at bottom */}
         <div
           aria-hidden
           className="absolute inset-x-0 bottom-0 h-8 pointer-events-none"
@@ -364,7 +315,6 @@ function CoverLetterMock() {
           }}
         />
       </div>
-      {/* Footer toolbar */}
       <div
         className="flex items-center justify-between px-3 py-2 border-t"
         style={{
@@ -373,10 +323,10 @@ function CoverLetterMock() {
         }}
       >
         <span className="font-mono text-[9px] tracking-[0.22em] uppercase text-text-dim">
-          + CV · 1 page
+          {m.cv[lang]}
         </span>
         <span className="font-mono text-[9px] tracking-[0.22em] uppercase text-text-soft">
-          Send →
+          {m.send[lang]}
         </span>
       </div>
     </motion.div>
@@ -421,28 +371,13 @@ function CapabilityIcon({ icon }: { icon: string }) {
           <circle cx="9" cy="14" r="5" stroke={stroke} strokeWidth="1.2" />
           <circle cx="19" cy="14" r="5" stroke={stroke} strokeWidth="1.2" />
           <path d="M14 14 L14 14" stroke={stroke} strokeWidth="2" strokeLinecap="round" />
-          <ellipse
-            cx="14"
-            cy="14"
-            rx="2"
-            ry="4.5"
-            fill={stroke}
-            fillOpacity="0.3"
-          />
+          <ellipse cx="14" cy="14" rx="2" ry="4.5" fill={stroke} fillOpacity="0.3" />
         </svg>
       );
     case "write":
       return (
         <svg width="28" height="28" viewBox="0 0 28 28" fill="none" opacity={opacity}>
-          <rect
-            x="5"
-            y="4"
-            width="14"
-            height="20"
-            rx="1.5"
-            stroke={stroke}
-            strokeWidth="1.2"
-          />
+          <rect x="5" y="4" width="14" height="20" rx="1.5" stroke={stroke} strokeWidth="1.2" />
           <path d="M8 10 H16" stroke={stroke} strokeWidth="1" strokeLinecap="round" />
           <path d="M8 14 H16" stroke={stroke} strokeWidth="1" strokeLinecap="round" />
           <path d="M8 18 H13" stroke={stroke} strokeWidth="1" strokeLinecap="round" />
@@ -458,15 +393,7 @@ function CapabilityIcon({ icon }: { icon: string }) {
     case "prep":
       return (
         <svg width="28" height="28" viewBox="0 0 28 28" fill="none" opacity={opacity}>
-          <rect
-            x="4"
-            y="6"
-            width="20"
-            height="14"
-            rx="1.5"
-            stroke={stroke}
-            strokeWidth="1.2"
-          />
+          <rect x="4" y="6" width="20" height="14" rx="1.5" stroke={stroke} strokeWidth="1.2" />
           <path d="M14 20 V24" stroke={stroke} strokeWidth="1.2" strokeLinecap="round" />
           <path d="M10 24 H18" stroke={stroke} strokeWidth="1.2" strokeLinecap="round" />
           <circle cx="14" cy="13" r="3" fill={stroke} fillOpacity="0.35" />

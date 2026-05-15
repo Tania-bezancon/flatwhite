@@ -2,10 +2,14 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useState } from "react";
+import { useLang } from "@/lib/lang";
+import { copy } from "@/lib/copy";
 
 // Flat white in a porcelain cup. Liquid level rises with scroll progress.
 // Foam crema sits on top of an espresso body.
 export function Pulse() {
+  const { lang } = useLang();
+  const tooltip = copy.pulse.tooltip[lang];
   const { scrollYProgress } = useScroll();
   // y position of the liquid surface — falls from 56 (low) to 22 (high)
   const surfaceY = useTransform(scrollYProgress, [0, 1], [56, 22]);
@@ -18,7 +22,7 @@ export function Pulse() {
       className="fixed top-6 right-6 w-[78px] h-[92px] z-50"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      aria-label="Today's pour."
+      aria-label={tooltip}
     >
       <motion.div
         animate={{ y: [0, -1.5, 0] }}
@@ -202,7 +206,7 @@ export function Pulse() {
           transition={{ duration: 0.4 }}
           className="absolute right-full mr-3 top-1/2 -translate-y-1/2 whitespace-nowrap font-mono text-[11px] tracking-wider uppercase text-text-soft"
         >
-          Today&apos;s pour
+          {tooltip}
         </motion.div>
       )}
 

@@ -2,6 +2,8 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import { useLang } from "@/lib/lang";
+import { copy } from "@/lib/copy";
 
 // Deterministic peer stars — same positions every render, no hydration drift.
 // Each value is a [x%, y%, opacity, radius] tuple inside the map area.
@@ -42,6 +44,8 @@ const PARTICLES = Array.from({ length: 12 }, (_, i) => ({
 }));
 
 export function MarketMirror() {
+  const { lang } = useLang();
+  const c = copy.mirror;
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { amount: 0.35, once: false });
 
@@ -75,16 +79,18 @@ export function MarketMirror() {
       </div>
 
       <motion.span
+        key={`code-${lang}`}
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.4 }}
         transition={{ duration: 0.9 }}
         className="relative z-10 font-mono text-[10px] tracking-[0.32em] uppercase text-text-faint mb-4"
       >
-        04 · Your constellation
+        {c.code[lang]}
       </motion.span>
 
       <motion.h2
+        key={`h2-${lang}`}
         initial={{ opacity: 0, y: 18 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.4 }}
@@ -96,8 +102,8 @@ export function MarketMirror() {
           lineHeight: 1.1,
         }}
       >
-        Every career is a constellation.{" "}
-        <span className="text-text-soft">Most never see theirs.</span>
+        {c.statement[lang][0]}{" "}
+        <span className="text-text-soft">{c.statement[lang][1]}</span>
       </motion.h2>
 
       {/* The constellation map */}
@@ -106,19 +112,21 @@ export function MarketMirror() {
       </div>
 
       <motion.p
+        key={`sub-${lang}`}
         initial={{ opacity: 0, y: 16 }}
         animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
         transition={{ duration: 1, delay: 2.6, ease: [0.32, 0.72, 0, 1] }}
         className="relative z-10 mt-12 text-text-soft text-center max-w-[520px] text-[15px] leading-[1.6]"
       >
-        You are not a list of skills. You are a position in a sky of peers,
-        targets and signals. Flatwhite reads the sky.
+        {c.subline[lang]}
       </motion.p>
     </section>
   );
 }
 
 function ConstellationMap({ inView }: { inView: boolean }) {
+  const { lang } = useLang();
+  const L = copy.mirror.labels;
   return (
     <div className="relative w-full h-full">
       {/* Soft nebula background — subtle warm glow center */}
@@ -389,45 +397,45 @@ function ConstellationMap({ inView }: { inView: boolean }) {
         inView={inView}
         delay={1.4}
         style={{ top: "10%", left: "50%", transform: "translateX(-50%) translateY(-110%)" }}
-        code="TARGET"
-        value="Product Engineer · AI"
+        code={L.target[lang].code}
+        value={L.target[lang].value}
         accent="amber"
       />
       <StarLabel
         inView={inView}
         delay={1.1}
         style={{ top: "57%", left: "50%", transform: "translateX(60%)" }}
-        code="YOU · TODAY"
-        value="Senior tier · 4 yrs"
+        code={L.you[lang].code}
+        value={L.you[lang].value}
         accent="cream"
       />
       <StarLabel
         inView={inView}
         delay={1.7}
         style={{ top: "30%", left: "10%" }}
-        code="ROAST"
-        value="Medium-dark"
+        code={L.roast[lang].code}
+        value={L.roast[lang].value}
       />
       <StarLabel
         inView={inView}
         delay={1.5}
         style={{ top: "44%", right: "6%" }}
-        code="DELTA"
-        value="−18K vs. peers"
+        code={L.delta[lang].code}
+        value={L.delta[lang].value}
       />
       <StarLabel
         inView={inView}
         delay={1.9}
         style={{ bottom: "12%", left: "16%" }}
-        code="SIGNAL"
-        value="Strong · rising"
+        code={L.signal[lang].code}
+        value={L.signal[lang].value}
       />
       <StarLabel
         inView={inView}
         delay={2.0}
         style={{ bottom: "10%", right: "14%" }}
-        code="DOMAIN"
-        value="Product · AI · Hybrid"
+        code={L.domain[lang].code}
+        value={L.domain[lang].value}
       />
     </div>
   );

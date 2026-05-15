@@ -1,26 +1,34 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useLang } from "@/lib/lang";
+import { copy } from "@/lib/copy";
 
 export function FinalCTA() {
+  const { lang } = useLang();
+  const c = copy.final;
+  const f = c.footer;
+  const cta = copy.brand.discuss[lang];
+
   return (
     <section
       id="final"
       className="relative min-h-screen flex flex-col items-center justify-between px-6 pt-32 pb-12"
     >
-      {/* Closing statement */}
       <div className="flex-1 flex flex-col items-center justify-center w-full max-w-[1000px] text-center">
         <motion.span
+          key={`code-${lang}`}
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.4 }}
           transition={{ duration: 0.8 }}
           className="font-mono text-[10px] tracking-[0.32em] uppercase text-text-faint mb-12"
         >
-          The promise
+          {c.code[lang]}
         </motion.span>
 
         <motion.h2
+          key={`h2-${lang}`}
           initial={{ opacity: 0, y: 24, filter: "blur(6px)" }}
           whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           viewport={{ once: true, amount: 0.4 }}
@@ -31,12 +39,13 @@ export function FinalCTA() {
             letterSpacing: "-0.04em",
           }}
         >
-          Sell yourself
+          {c.statement[lang][0]}
           <br />
-          <span className="text-text-soft">at the right price.</span>
+          <span className="text-text-soft">{c.statement[lang][1]}</span>
         </motion.h2>
 
         <motion.p
+          key={`p-${lang}`}
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.4 }}
@@ -47,8 +56,7 @@ export function FinalCTA() {
             lineHeight: 1.55,
           }}
         >
-          Be visible at your true value. Every morning, a quiet read of where
-          you stand — and the one move that moves you forward.
+          {c.subline[lang]}
         </motion.p>
 
         <motion.div
@@ -68,7 +76,7 @@ export function FinalCTA() {
                 "0 8px 32px rgba(0,0,0,0.35), 0 0 0 1px rgba(249,238,212,0.1)",
             }}
           >
-            Let&apos;s discuss
+            {cta}
             <span
               className="inline-flex items-center justify-center w-8 h-8 rounded-full"
               style={{ background: "rgba(29,15,6,0.08)" }}
@@ -84,13 +92,15 @@ export function FinalCTA() {
               </svg>
             </span>
           </a>
-          <span className="font-mono text-[10px] tracking-[0.28em] uppercase text-text-faint">
-            Lives in Claude · No dashboard · No noise
+          <span
+            key={`cap-${lang}`}
+            className="font-mono text-[10px] tracking-[0.28em] uppercase text-text-faint"
+          >
+            {c.caption[lang]}
           </span>
         </motion.div>
       </div>
 
-      {/* Sea View Lab attribution footer */}
       <motion.footer
         initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -107,13 +117,17 @@ export function FinalCTA() {
               boxShadow: "0 0 8px rgba(232,154,75,0.8)",
             }}
           />
-          <span className="font-mono text-[10px] tracking-[0.32em] uppercase text-text-faint">
-            Experiment · Agentic Tools
+          <span
+            key={`fl-${lang}`}
+            className="font-mono text-[10px] tracking-[0.32em] uppercase text-text-faint"
+          >
+            {f.label[lang]}
           </span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-[1.4fr_1fr] gap-10 md:gap-16 mb-16">
           <p
+            key={`p1-${lang}`}
             className="text-text-soft"
             style={{
               fontSize: "clamp(15px, 1.2vw, 17px)",
@@ -121,12 +135,10 @@ export function FinalCTA() {
               letterSpacing: "-0.005em",
             }}
           >
-            <span className="text-text">flatwhite</span> is an experimental
-            interface by Sea View Lab — exploring what agentic tools can
-            become when they live inside the workflow you already use, not
-            in a new chat window.
+            <span className="text-text">flatwhite</span> {f.para1[lang]}
           </p>
           <p
+            key={`p2-${lang}`}
             className="text-text-soft"
             style={{
               fontSize: "14px",
@@ -134,16 +146,17 @@ export function FinalCTA() {
               letterSpacing: "-0.005em",
             }}
           >
-            Sea View Lab builds experimental projects to push what&apos;s
-            possible with agentic, voice-first tools — interfaces that
-            quietly fit into the way you already work.
+            {f.para2[lang]}
           </p>
         </div>
 
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
           <div className="flex flex-col gap-2">
-            <span className="font-mono text-[10px] tracking-[0.32em] uppercase text-text-faint">
-              An experiment by
+            <span
+              key={`by-${lang}`}
+              className="font-mono text-[10px] tracking-[0.32em] uppercase text-text-faint"
+            >
+              {f.by[lang]}
             </span>
             <span
               className="font-light text-text"
@@ -175,8 +188,8 @@ export function FinalCTA() {
         </div>
 
         <div className="mt-12 flex items-center justify-between gap-4 font-mono text-[9px] tracking-[0.28em] uppercase text-text-dim/70">
-          <span>flatwhite v0.1</span>
-          <span>Made in Barcelona · 2026</span>
+          <span>flatwhite v0.1 · {f.meta[lang]}</span>
+          <span key={`made-${lang}`}>{f.made[lang]}</span>
         </div>
       </motion.footer>
     </section>

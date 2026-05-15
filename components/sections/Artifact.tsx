@@ -1,10 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useLang } from "@/lib/lang";
+import { copy } from "@/lib/copy";
 
-// 3 floating glass cards — what you wake up to each morning.
-// Mock content only, no real product UI.
 export function Artifact() {
+  const { lang } = useLang();
+  const c = copy.artifact;
+
   return (
     <section
       id="artifact"
@@ -12,16 +15,18 @@ export function Artifact() {
     >
       <div className="w-full max-w-[1180px] flex flex-col items-center">
         <motion.span
+          key={`code-${lang}`}
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 1, ease: [0.32, 0.72, 0, 1] }}
           className="block font-mono text-[10px] tracking-[0.32em] uppercase text-text-faint mb-6"
         >
-          —— The artifact
+          {c.code[lang]}
         </motion.span>
 
         <motion.h2
+          key={`h2-${lang}`}
           initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
@@ -33,34 +38,26 @@ export function Artifact() {
             lineHeight: 1.15,
           }}
         >
-          What you wake up to.{" "}
-          <span className="text-text-soft">
-            One artifact, every morning at 7am.
-          </span>
+          {c.statement[lang][0]}{" "}
+          <span className="text-text-soft">{c.statement[lang][1]}</span>
         </motion.h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 w-full">
-          {/* Card 1 — Daily Read with sparkline */}
-          <GlassCard
-            label="Daily read"
-            delay={0}
-            tilt={-1.5}
-          >
+          <GlassCard label={c.card1.label[lang]} delay={0} tilt={-1.5}>
             <div className="flex items-baseline justify-between mb-4">
               <span className="font-mono text-[10px] tracking-[0.24em] uppercase text-text-dim">
-                MAY · 13
+                {c.card1.date[lang]}
               </span>
               <span className="font-mono text-[10px] tracking-[0.24em] uppercase text-[var(--amber)]">
-                ↑ 4
+                {c.card1.delta[lang]}
               </span>
             </div>
             <div className="text-text font-light text-[28px] leading-none mb-1">
-              Senior tier
+              {c.card1.title[lang]}
             </div>
             <div className="text-text-soft text-[13px] mb-6">
-              You crossed the threshold last week.
+              {c.card1.sub[lang]}
             </div>
-            {/* Mock sparkline */}
             <svg viewBox="0 0 240 60" className="w-full h-[60px]" aria-hidden>
               <defs>
                 <linearGradient id="sparkFill" x1="0" y1="0" x2="0" y2="1">
@@ -92,57 +89,49 @@ export function Artifact() {
             </svg>
           </GlassCard>
 
-          {/* Card 2 — The Gap with big number */}
-          <GlassCard
-            label="The gap"
-            delay={0.12}
-            tilt={0.5}
-            featured
-          >
+          <GlassCard label={c.card2.label[lang]} delay={0.12} tilt={0.5} featured>
             <div className="flex items-baseline justify-between mb-4">
               <span className="font-mono text-[10px] tracking-[0.24em] uppercase text-text-dim">
-                MARKET DELTA
+                {c.card2.delta[lang]}
               </span>
               <span className="font-mono text-[10px] tracking-[0.24em] uppercase text-text-dim">
-                vs. peers
+                {c.card2.vs[lang]}
               </span>
             </div>
             <div
               className="text-text font-light leading-none mb-2"
-              style={{ fontSize: "clamp(54px, 4.8vw, 76px)", letterSpacing: "-0.04em" }}
+              style={{
+                fontSize: "clamp(54px, 4.8vw, 76px)",
+                letterSpacing: "-0.04em",
+              }}
             >
-              −18K
+              {c.card2.title[lang]}
             </div>
             <div className="text-text-soft text-[13px] mb-5">
-              You&apos;re underpriced for your level.
+              {c.card2.sub[lang]}
             </div>
             <div className="flex flex-col gap-2">
-              <BarRow label="Your range" value={62} accent="text-soft" />
-              <BarRow label="Market range" value={86} accent="cream" />
+              <BarRow label={c.card2.rangeYou[lang]} value={62} accent="text-soft" />
+              <BarRow label={c.card2.rangeMarket[lang]} value={86} accent="cream" />
             </div>
           </GlassCard>
 
-          {/* Card 3 — Today's Move */}
-          <GlassCard
-            label="Today's move"
-            delay={0.24}
-            tilt={1.5}
-          >
+          <GlassCard label={c.card3.label[lang]} delay={0.24} tilt={1.5}>
             <div className="flex items-baseline justify-between mb-4">
               <span className="font-mono text-[10px] tracking-[0.24em] uppercase text-text-dim">
-                PRIORITY · 01
+                {c.card3.priority[lang]}
               </span>
               <span className="font-mono text-[10px] tracking-[0.24em] uppercase text-[var(--sage)]">
-                Today
+                {c.card3.today[lang]}
               </span>
             </div>
             <div className="text-text font-light text-[22px] leading-[1.2] mb-3 tracking-[-0.02em]">
-              Reframe your title.
+              {c.card3.title[lang]}
             </div>
             <div className="text-text-soft text-[13px] mb-5 leading-[1.55]">
-              Pitch yourself as{" "}
-              <span className="text-text">Product Engineer · AI</span>{" "}
-              — your work matches the market term.
+              {c.card3.sub1[lang]}
+              <span className="text-text">{c.card3.role[lang]}</span>
+              {c.card3.sub2[lang]}
             </div>
             <div
               className="rounded-md px-3 py-2 border text-[12px] font-mono leading-[1.4] text-text-soft"
@@ -151,21 +140,22 @@ export function Artifact() {
                 background: "rgba(245,220,179,0.03)",
               }}
             >
-              <span className="text-text-dim">/ suggested headline</span>
+              <span className="text-text-dim">{c.card3.mockLabel[lang]}</span>
               <br />
-              Product Engineer building AI at scale
+              {c.card3.mockText[lang]}
             </div>
           </GlassCard>
         </div>
 
         <motion.p
+          key={`cap-${lang}`}
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 1, delay: 0.6 }}
           className="mt-16 font-mono text-[10px] tracking-[0.28em] uppercase text-text-dim"
         >
-          Delivered as one quiet email · No dashboard to open
+          {c.caption[lang]}
         </motion.p>
       </div>
     </section>
@@ -190,11 +180,7 @@ function GlassCard({
       initial={{ opacity: 0, y: 30, rotateZ: 0 }}
       whileInView={{ opacity: 1, y: 0, rotateZ: tilt }}
       viewport={{ once: true, amount: 0.3 }}
-      transition={{
-        duration: 1.1,
-        delay,
-        ease: [0.32, 0.72, 0, 1],
-      }}
+      transition={{ duration: 1.1, delay, ease: [0.32, 0.72, 0, 1] }}
       whileHover={{ rotateZ: 0, y: -4 }}
       className="relative rounded-2xl p-7 backdrop-blur-xl"
       style={{

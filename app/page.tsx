@@ -1,4 +1,6 @@
+import { LanguageProvider } from "@/lib/lang";
 import { AmbientBackground } from "@/components/AmbientBackground";
+import { GlobalHeader } from "@/components/GlobalHeader";
 import { StackedMenu } from "@/components/StackedMenu";
 import { Pulse } from "@/components/Pulse";
 import { Hero } from "@/components/sections/Hero";
@@ -12,18 +14,21 @@ import { FinalCTA } from "@/components/sections/FinalCTA";
 
 export default function Home() {
   return (
-    <main className="relative">
-      <AmbientBackground />
-      <StackedMenu />
-      <Pulse />
-      <Hero />
-      <TheMoment />
-      <ManifestoBreak />
-      <HowItWorks />
-      <Artifact />
-      <MarketMirror />
-      <TheFullCircle />
-      <FinalCTA />
-    </main>
+    <LanguageProvider>
+      <main className="relative">
+        <AmbientBackground />
+        <GlobalHeader />
+        <StackedMenu />
+        <Pulse />
+        <Hero />
+        <TheMoment />
+        <ManifestoBreak />
+        <HowItWorks />
+        <Artifact />
+        <MarketMirror />
+        <TheFullCircle />
+        <FinalCTA />
+      </main>
+    </LanguageProvider>
   );
 }

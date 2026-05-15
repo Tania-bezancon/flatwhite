@@ -1,35 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
-
-const STEPS = [
-  {
-    code: "01",
-    title: "Drop yourself in.",
-    desc: "Paste your LinkedIn, your CV, or just tell Claude who you are and what you're aiming at. Five minutes.",
-    detail: "/ Add to context",
-  },
-  {
-    code: "02",
-    title: "Let it watch.",
-    desc: "Flatwhite runs in the background of your Claude conversations. No app to open, no dashboard to check, no tab to keep alive.",
-    detail: "/ Lives in the thread",
-  },
-  {
-    code: "03",
-    title: "Read the morning artifact.",
-    desc: "7am. One quiet message. Where you sit, what shifted in your market overnight, the one move worth making today.",
-    detail: "/ Delivered as an artifact",
-  },
-  {
-    code: "04",
-    title: "Act, inline.",
-    desc: "See a job that fits? Click. Cover letter and a tailored CV land in the same conversation. Tweak. Send.",
-    detail: "/ Stays where you work",
-  },
-];
+import { useLang } from "@/lib/lang";
+import { copy } from "@/lib/copy";
 
 export function HowItWorks() {
+  const { lang } = useLang();
+  const c = copy.how;
+  const steps = c.steps[lang];
+
   return (
     <section
       id="how"
@@ -37,16 +16,18 @@ export function HowItWorks() {
     >
       <div className="w-full max-w-[1000px] flex flex-col items-center">
         <motion.span
+          key={`code-${lang}`}
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 1, ease: [0.32, 0.72, 0, 1] }}
           className="block font-mono text-[10px] tracking-[0.32em] uppercase text-text-faint mb-6"
         >
-          03 · How it works
+          {c.code[lang]}
         </motion.span>
 
         <motion.h2
+          key={`h2-${lang}`}
           initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
@@ -58,13 +39,12 @@ export function HowItWorks() {
             lineHeight: 1.05,
           }}
         >
-          Now you do.{" "}
-          <span className="text-text-soft">
-            It lives in Claude.
-          </span>
+          {c.statement[lang][0]}{" "}
+          <span className="text-text-soft">{c.statement[lang][1]}</span>
         </motion.h2>
 
         <motion.p
+          key={`p-${lang}`}
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, amount: 0.3 }}
@@ -75,15 +55,13 @@ export function HowItWorks() {
             lineHeight: 1.55,
           }}
         >
-          Flatwhite is an agent — not another tab. It runs inside Claude,
-          quietly, in the conversations you already have. Four moments,
-          four interactions.
+          {c.subline[lang]}
         </motion.p>
 
         <ul className="mt-20 w-full flex flex-col">
-          {STEPS.map((s, i) => (
+          {steps.map((s, i) => (
             <motion.li
-              key={s.code}
+              key={`${lang}-${s.code}`}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.3 }}

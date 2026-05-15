@@ -2,8 +2,12 @@
 
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { useLang } from "@/lib/lang";
+import { copy } from "@/lib/copy";
 
 export function ManifestoBreak() {
+  const { lang } = useLang();
+  const c = copy.manifesto;
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { amount: 0.45, once: false });
 
@@ -12,7 +16,6 @@ export function ManifestoBreak() {
     offset: ["start end", "end start"],
   });
 
-  // Portal grows as we scroll into view, shrinks back as we leave.
   const portalScale = useTransform(
     scrollYProgress,
     [0, 0.35, 0.65, 1],
@@ -30,7 +33,6 @@ export function ManifestoBreak() {
       id="manifesto"
       className="relative min-h-screen flex items-center justify-center px-6 overflow-hidden"
     >
-      {/* Turrell portal — a large luminous arch/disc behind the text */}
       <motion.div
         aria-hidden
         className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[58%] pointer-events-none"
@@ -41,7 +43,6 @@ export function ManifestoBreak() {
           scale: portalScale,
         }}
       >
-        {/* Outer bloom */}
         <div
           className="absolute inset-0 rounded-full"
           style={{
@@ -50,7 +51,6 @@ export function ManifestoBreak() {
             filter: "blur(30px)",
           }}
         />
-        {/* Inner glow disc — the brightest core */}
         <div
           className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
           style={{
@@ -61,7 +61,6 @@ export function ManifestoBreak() {
             filter: "blur(8px)",
           }}
         />
-        {/* Thin ring — the portal edge */}
         <div
           className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
           style={{
@@ -74,7 +73,6 @@ export function ManifestoBreak() {
         />
       </motion.div>
 
-      {/* Floor reflection — light spilling onto the chocolate floor */}
       <div
         aria-hidden
         className="absolute inset-x-0 bottom-0 h-[45%] pointer-events-none"
@@ -84,7 +82,6 @@ export function ManifestoBreak() {
         }}
       />
 
-      {/* Subtle vertical light shaft for "doorway" feel */}
       <div
         aria-hidden
         className="absolute left-1/2 top-0 -translate-x-1/2 pointer-events-none"
@@ -100,15 +97,17 @@ export function ManifestoBreak() {
 
       <div className="relative z-10 flex flex-col items-center text-center">
         <motion.span
+          key={`code-${lang}`}
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: 0.8 }}
           className="font-mono text-[10px] tracking-[0.32em] uppercase text-text-faint mb-16"
         >
-          02 · The asymmetry
+          {c.code[lang]}
         </motion.span>
 
         <motion.h2
+          key={`h2-${lang}`}
           className="font-light leading-[0.95]"
           style={{
             fontSize: "clamp(56px, 9vw, 144px)",
@@ -125,9 +124,9 @@ export function ManifestoBreak() {
           }
           transition={{ duration: 1.2, ease: [0.32, 0.72, 0, 1] }}
         >
-          Recruiters have AI.
+          {c.statement[lang][0]}
           <br />
-          <span className="text-text-soft">You don&apos;t.</span>
+          <span className="text-text-soft">{c.statement[lang][1]}</span>
         </motion.h2>
 
         <motion.div
@@ -148,22 +147,23 @@ export function ManifestoBreak() {
         />
 
         <motion.p
+          key={`p-${lang}`}
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: 1, delay: 2.4 }}
           className="mt-10 text-text-soft max-w-[460px] text-[14px] leading-[1.6]"
         >
-          Algorithms scan, score and price you in milliseconds.
-          You&apos;ve been on the wrong side of that math.
+          {c.subline[lang]}
         </motion.p>
 
         <motion.p
+          key={`u-${lang}`}
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: 1, delay: 3.2 }}
           className="mt-6 font-mono text-[11px] tracking-[0.32em] uppercase text-[var(--amber)]"
         >
-          ↓ until now
+          {c.untilNow[lang]}
         </motion.p>
       </div>
     </section>
