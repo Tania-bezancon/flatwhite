@@ -1,7 +1,6 @@
 import { AmbientBackground } from "@/components/AmbientBackground";
 import { StackedMenu } from "@/components/StackedMenu";
 import { Pulse } from "@/components/Pulse";
-import { ScrollThread } from "@/components/ScrollThread";
 import { Hero } from "@/components/sections/Hero";
 import { TheMoment } from "@/components/sections/TheMoment";
 import { ManifestoBreak } from "@/components/sections/ManifestoBreak";
@@ -15,7 +14,6 @@ export default function Home() {
   return (
     <main className="relative">
       <AmbientBackground />
-      <ScrollThread />
       <StackedMenu />
       <Pulse />
       <Hero />

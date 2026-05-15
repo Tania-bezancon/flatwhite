@@ -64,9 +64,8 @@ app/
 
 components/
   AmbientBackground.tsx    Scroll-driven chocolate gradient + Turrell auroras
-  Pulse.tsx                Top-right coffee cup totem (SVG, fills with scroll)
+  Pulse.tsx                Top-right coffee cup totem (SVG, fills with scroll — doubles as scroll progress)
   StackedMenu.tsx          Top-center menu (READ · MIRROR · MAP · AIM · RISE)
-  ScrollThread.tsx         Right-edge progress thread (amber → cream)
   SmoothScroll.tsx         Lenis init (client wrapper)
   OrbScene.tsx             R3F iridescent orb — kept for future, not imported
   sections/
