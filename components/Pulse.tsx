@@ -1,201 +1,139 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { useState } from "react";
 import { useLang } from "@/lib/lang";
 import { copy } from "@/lib/copy";
 
-// Flat white in a porcelain cup. Liquid level rises with scroll progress.
-// Foam crema sits on top of an espresso body.
+// The Reading Mark — a personal abstract glyph for flatwhite.
+// A horizon line. A dot that rises through it with scroll progress.
+// "Rise above the market" — the brand promise as pure geometry.
 export function Pulse() {
   const { lang } = useLang();
   const tooltip = copy.pulse.tooltip[lang];
+
   const { scrollYProgress } = useScroll();
-  // y position of the liquid surface — falls from 56 (low) to 22 (high)
-  const surfaceY = useTransform(scrollYProgress, [0, 1], [56, 22]);
-  // foam grows from a sliver to fill the upper third
-  const foamH = useTransform(scrollYProgress, [0, 1], [3, 14]);
+  // Smooth the scroll for nicer motion of the dot
+  const smooth = useSpring(scrollYProgress, {
+    stiffness: 60,
+    damping: 22,
+    mass: 0.5,
+  });
+  // Dot y: from below the horizon (y=44) up to above (y=20)
+  const dotY = useTransform(smooth, [0, 1], [44, 20]);
+  // The dot brightens as it rises above the line
+  const dotOpacity = useTransform(smooth, [0, 0.45, 0.5, 1], [0.55, 0.6, 1, 1]);
+  // The trailing halo intensity also grows
+  const haloOpacity = useTransform(smooth, [0, 1], [0.25, 0.7]);
+
   const [hover, setHover] = useState(false);
 
   return (
     <div
-      className="fixed top-6 right-6 w-[78px] h-[92px] z-50"
+      className="fixed top-6 right-6 w-[72px] h-[72px] z-50"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       aria-label={tooltip}
     >
       <motion.div
-        animate={{ y: [0, -1.5, 0] }}
-        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+        animate={{ rotate: [0, 360] }}
+        transition={{ duration: 240, repeat: Infinity, ease: "linear" }}
         whileHover={{ scale: 1.05 }}
-        className="w-full h-full"
+        className="absolute inset-0"
       >
-        <svg viewBox="0 0 78 92" className="w-full h-full" aria-hidden>
+        <svg viewBox="0 0 64 64" className="w-full h-full" aria-hidden>
           <defs>
-            {/* Porcelain cup body — warm white with cream undertone */}
-            <linearGradient id="porcelain" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#fbf2e6" />
-              <stop offset="55%" stopColor="#e6d2b1" />
-              <stop offset="100%" stopColor="#9a7c54" />
-            </linearGradient>
-            {/* Inside shadow */}
-            <radialGradient id="cupInside" cx="50%" cy="20%" r="65%">
-              <stop offset="0%" stopColor="#2a180c" stopOpacity="0.0" />
-              <stop offset="80%" stopColor="#1d0f06" stopOpacity="0.55" />
+            <radialGradient id="rmark-bg" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="rgba(58,36,20,0.7)" />
+              <stop offset="60%" stopColor="rgba(29,15,6,0.6)" />
+              <stop offset="100%" stopColor="rgba(18,8,2,0.0)" />
             </radialGradient>
-            {/* Espresso body */}
-            <linearGradient id="espresso" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#3a2414" />
-              <stop offset="60%" stopColor="#2a180c" />
-              <stop offset="100%" stopColor="#1d0f06" />
-            </linearGradient>
-            {/* Crema foam */}
-            <linearGradient id="foam" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#fbf2e6" />
-              <stop offset="55%" stopColor="#f5dcb3" />
-              <stop offset="100%" stopColor="#e89a4b" />
-            </linearGradient>
-            {/* Cup body clip — slight tulip shape */}
-            <clipPath id="cupInner">
-              <path d="M18 22 Q18 19 22 19 L56 19 Q60 19 60 22 L57 64 Q55 70 50 70 L28 70 Q23 70 21 64 Z" />
-            </clipPath>
+            <radialGradient id="rmark-halo" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="rgba(232,154,75,0.55)" />
+              <stop offset="60%" stopColor="rgba(232,154,75,0.10)" />
+              <stop offset="100%" stopColor="rgba(232,154,75,0)" />
+            </radialGradient>
           </defs>
 
-          {/* Saucer — ellipse below */}
-          <ellipse
-            cx="39"
-            cy="78"
-            rx="28"
-            ry="4.5"
-            fill="url(#porcelain)"
-            stroke="#9a7c54"
-            strokeOpacity="0.4"
-            strokeWidth="0.6"
-          />
-          <ellipse
-            cx="39"
-            cy="77.5"
-            rx="24"
-            ry="3"
-            fill="#1d0f06"
-            opacity="0.15"
-          />
-          {/* Saucer drop shadow on the chocolate ground */}
-          <ellipse
-            cx="39"
-            cy="83"
-            rx="30"
-            ry="2.5"
-            fill="#000"
-            opacity="0.35"
-            filter="blur(2px)"
+          {/* Soft outer halo (always present) */}
+          <motion.circle
+            cx="32"
+            cy="32"
+            r="30"
+            fill="url(#rmark-halo)"
+            style={{ opacity: haloOpacity }}
           />
 
-          {/* Cup handle (right side) */}
-          <path
-            d="M60 30 Q70 30 70 40 Q70 50 60 50"
-            fill="none"
-            stroke="url(#porcelain)"
-            strokeWidth="2.4"
-            strokeLinecap="round"
-          />
-          <path
-            d="M60 30 Q70 30 70 40 Q70 50 60 50"
-            fill="none"
-            stroke="#9a7c54"
-            strokeOpacity="0.35"
-            strokeWidth="0.6"
-            strokeLinecap="round"
-          />
+          {/* Inner disc background */}
+          <circle cx="32" cy="32" r="22" fill="url(#rmark-bg)" />
 
-          {/* Cup body */}
-          <path
-            d="M18 22 Q18 19 22 19 L56 19 Q60 19 60 22 L57 64 Q55 70 50 70 L28 70 Q23 70 21 64 Z"
-            fill="url(#porcelain)"
-            stroke="#9a7c54"
-            strokeOpacity="0.45"
+          {/* Thin outer ring */}
+          <circle
+            cx="32"
+            cy="32"
+            r="22"
+            fill="none"
+            stroke="rgba(245,220,179,0.35)"
             strokeWidth="0.6"
           />
 
-          {/* Interior */}
-          <g clipPath="url(#cupInner)">
-            {/* Liquid (espresso) */}
-            <motion.rect
-              x="14"
-              width="50"
-              height="60"
-              fill="url(#espresso)"
-              style={{ y: surfaceY }}
-            />
-            {/* Crema foam layer on top of liquid surface */}
-            <motion.rect
-              x="14"
-              width="50"
-              fill="url(#foam)"
-              style={{ y: surfaceY, height: foamH }}
-            />
-            {/* Latte-art-like elliptical highlight on the foam */}
-            <motion.ellipse
-              cx="39"
-              rx="14"
-              ry="1.2"
-              fill="#ffffff"
-              opacity="0.55"
-              style={{ cy: surfaceY }}
-            />
-            {/* Interior shadow */}
-            <rect x="14" y="19" width="50" height="55" fill="url(#cupInside)" />
-          </g>
-
-          {/* Rim highlight (top of cup edge) */}
-          <ellipse
-            cx="39"
-            cy="20"
-            rx="20"
-            ry="2.4"
-            fill="none"
-            stroke="#fbf2e6"
+          {/* The horizon line — the market */}
+          <line
+            x1="20"
+            y1="32"
+            x2="44"
+            y2="32"
+            stroke="rgba(245,220,179,0.7)"
             strokeWidth="0.7"
-            strokeOpacity="0.7"
-          />
-
-          {/* Side specular */}
-          <path
-            d="M22 24 Q23 40 26 60"
-            stroke="#fbf2e6"
-            strokeOpacity="0.5"
-            strokeWidth="1"
             strokeLinecap="round"
-            fill="none"
+          />
+          {/* Subtle marker ticks on the horizon */}
+          <line
+            x1="20"
+            y1="31"
+            x2="20"
+            y2="33"
+            stroke="rgba(245,220,179,0.45)"
+            strokeWidth="0.5"
+            strokeLinecap="round"
+          />
+          <line
+            x1="44"
+            y1="31"
+            x2="44"
+            y2="33"
+            stroke="rgba(245,220,179,0.45)"
+            strokeWidth="0.5"
+            strokeLinecap="round"
           />
 
-          {/* Steam wisps */}
-          <g className="steam" opacity="0.55">
-            <path
-              d="M30 16 Q33 12 30 6 Q27 2 30 -2"
-              stroke="#fbf2e6"
-              strokeWidth="1"
-              fill="none"
-              strokeLinecap="round"
-              opacity="0.6"
+          {/* The dot — you. Rises above the horizon with scroll. */}
+          <motion.g style={{ y: dotY, opacity: dotOpacity }}>
+            {/* Glow under the dot */}
+            <circle
+              cx="32"
+              cy="0"
+              r="5"
+              fill="rgba(249,238,212,0.25)"
             />
-            <path
-              d="M40 14 Q43 10 40 4 Q37 0 40 -4"
-              stroke="#fbf2e6"
-              strokeWidth="1.1"
+            {/* Bright core */}
+            <circle cx="32" cy="0" r="2" fill="#fbf2e6" />
+            {/* Pulsing aura */}
+            <motion.circle
+              cx="32"
+              cy="0"
+              r="2"
               fill="none"
-              strokeLinecap="round"
-              opacity="0.8"
+              stroke="rgba(249,238,212,0.65)"
+              strokeWidth="0.6"
+              animate={{ r: [2, 6, 2], opacity: [0.65, 0, 0.65] }}
+              transition={{
+                duration: 2.6,
+                repeat: Infinity,
+                ease: "easeOut",
+              }}
             />
-            <path
-              d="M50 16 Q47 12 50 6"
-              stroke="#fbf2e6"
-              strokeWidth="1"
-              fill="none"
-              strokeLinecap="round"
-              opacity="0.5"
-            />
-          </g>
+          </motion.g>
         </svg>
       </motion.div>
 
@@ -209,17 +147,6 @@ export function Pulse() {
           {tooltip}
         </motion.div>
       )}
-
-      <style>{`
-        @keyframes steam-rise {
-          0%, 100% { opacity: 0.35; transform: translateY(0); }
-          50% { opacity: 0.7; transform: translateY(-1px); }
-        }
-        .steam { animation: steam-rise 4s ease-in-out infinite; transform-origin: center bottom; }
-        @media (prefers-reduced-motion: reduce) {
-          .steam { animation: none; }
-        }
-      `}</style>
     </div>
   );
 }

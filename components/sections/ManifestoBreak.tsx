@@ -9,30 +9,54 @@ export function ManifestoBreak() {
   const { lang } = useLang();
   const c = copy.manifesto;
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { amount: 0.45, once: false });
+  // Lower threshold so the statement starts revealing earlier as the section enters.
+  const inView = useInView(ref, { amount: 0.2, once: false });
 
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
   });
 
+  // Portal grows + brightens smoothly across the whole section pass.
+  // Starts visible (0.25 opacity) the moment any part of the section enters
+  // the viewport — no abrupt onset.
   const portalScale = useTransform(
     scrollYProgress,
-    [0, 0.35, 0.65, 1],
-    [0.85, 1, 1, 0.92],
+    [0, 0.5, 1],
+    [0.78, 1.02, 0.94],
   );
   const portalOpacity = useTransform(
     scrollYProgress,
-    [0, 0.2, 0.6, 0.85],
-    [0, 1, 1, 0.6],
+    [0, 0.15, 0.45, 0.7, 1],
+    [0.25, 0.7, 1, 0.85, 0.35],
+  );
+
+  // Soft warm bleed that leads into the section — visible above-the-section
+  // as you scroll TheMoment, so the chocolate slowly warms up.
+  const bleedOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.15, 0.4],
+    [0, 0.7, 1],
   );
 
   return (
     <section
       ref={ref}
       id="manifesto"
-      className="relative min-h-screen flex items-center justify-center px-6 overflow-hidden"
+      className="relative min-h-screen flex items-center justify-center px-6"
     >
+      {/* Warm bleed that reaches ABOVE the section — softens the transition
+          from TheMoment into the manifesto. Allowed to overflow the section. */}
+      <motion.div
+        aria-hidden
+        className="absolute -top-[40vh] left-0 right-0 h-[60vh] pointer-events-none"
+        style={{
+          opacity: bleedOpacity,
+          background:
+            "radial-gradient(50% 100% at 50% 100%, rgba(232,154,75,0.20) 0%, rgba(232,154,75,0.08) 35%, rgba(232,154,75,0) 70%)",
+        }}
+      />
+
       <motion.div
         aria-hidden
         className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[58%] pointer-events-none"
@@ -116,13 +140,13 @@ export function ManifestoBreak() {
             textShadow:
               "0 2px 40px rgba(232,154,75,0.25), 0 0 80px rgba(249,238,212,0.10)",
           }}
-          initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
+          initial={{ opacity: 0, y: 20, filter: "blur(5px)" }}
           animate={
             inView
               ? { opacity: 1, y: 0, filter: "blur(0px)" }
-              : { opacity: 0, y: 30, filter: "blur(8px)" }
+              : { opacity: 0, y: 20, filter: "blur(5px)" }
           }
-          transition={{ duration: 1.2, ease: [0.32, 0.72, 0, 1] }}
+          transition={{ duration: 1.6, ease: [0.32, 0.72, 0, 1] }}
         >
           {c.statement[lang][0]}
           <br />
