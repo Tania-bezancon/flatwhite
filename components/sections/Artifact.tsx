@@ -182,7 +182,7 @@ function GlassCard({
       viewport={{ once: true, amount: 0.3 }}
       transition={{ duration: 1.1, delay, ease: [0.32, 0.72, 0, 1] }}
       whileHover={{ rotateZ: 0, y: -4 }}
-      className="relative rounded-2xl p-7 backdrop-blur-xl"
+      className="relative rounded-2xl p-7 backdrop-blur-md"
       style={{
         background: featured
           ? "linear-gradient(135deg, rgba(245,220,179,0.10) 0%, rgba(245,220,179,0.03) 100%)"

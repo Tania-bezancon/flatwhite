@@ -67,7 +67,11 @@ export function MarketMirror() {
               opacity: 0.35,
               boxShadow: "0 0 6px rgba(232,154,75,0.6)",
             }}
-            animate={{ y: ["0vh", "-115vh"], opacity: [0, 0.55, 0] }}
+            animate={
+              inView
+                ? { y: ["0vh", "-115vh"], opacity: [0, 0.55, 0] }
+                : { opacity: 0 }
+            }
             transition={{
               duration: p.duration,
               delay: p.delay,
@@ -265,7 +269,9 @@ function ConstellationMap({ inView }: { inView: boolean }) {
             fill="none"
             stroke="rgba(245,220,179,0.5)"
             strokeWidth="0.8"
-            animate={{ r: [6, 22, 6], opacity: [0.5, 0, 0.5] }}
+            animate={
+              inView ? { r: [6, 22, 6], opacity: [0.5, 0, 0.5] } : { opacity: 0 }
+            }
             transition={{
               duration: 3.2,
               repeat: Infinity,
@@ -349,7 +355,9 @@ function ConstellationMap({ inView }: { inView: boolean }) {
             fill="none"
             stroke="rgba(249,238,212,0.7)"
             strokeWidth="0.9"
-            animate={{ r: [5, 16, 5], opacity: [0.7, 0, 0.7] }}
+            animate={
+              inView ? { r: [5, 16, 5], opacity: [0.7, 0, 0.7] } : { opacity: 0 }
+            }
             transition={{
               duration: 2.4,
               repeat: Infinity,

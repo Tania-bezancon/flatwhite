@@ -172,7 +172,8 @@ function Timeline({
                 <motion.div
                   className="absolute inset-0 rounded-full border"
                   style={{ borderColor: "var(--cream)", opacity: 0.4 }}
-                  animate={{ scale: [1, 1.5, 1], opacity: [0.4, 0, 0.4] }}
+                  whileInView={{ scale: [1, 1.5, 1], opacity: [0.4, 0, 0.4] }}
+                  viewport={{ once: false }}
                   transition={{ duration: 2.4, repeat: Infinity, ease: "easeOut" }}
                 />
               )}
