@@ -10,7 +10,7 @@ export const copy = {
   },
 
   pulse: {
-    tooltip: t("Today's pour", "Le café du jour"),
+    tooltip: t("Your morning read", "Ta lecture du matin"),
   },
 
   hero: {
