@@ -56,6 +56,23 @@ export const copy = {
       "Algorithms scan, score and price you in milliseconds. You've been on the wrong side of that math.",
       "Les algorithmes te scannent, te notent et te valorisent en millisecondes. Tu étais du mauvais côté de cette équation.",
     ),
+    framing: t("This is what they see.", "Voici ce qu'ils voient."),
+    scanLabel: t("Scanning candidate", "Analyse du candidat"),
+    scanRef: t("REF · 4471", "RÉF · 4471"),
+    verdicts: t(
+      [
+        { k: "FIT", v: "62%" },
+        { k: "BAND", v: "Senior tier" },
+        { k: "FLAG", v: "Overqualified" },
+        { k: "PRICE", v: "−18K vs. market" },
+      ],
+      [
+        { k: "FIT", v: "62%" },
+        { k: "NIVEAU", v: "Senior" },
+        { k: "ALERTE", v: "Surqualifié" },
+        { k: "PRIX", v: "−18K vs. marché" },
+      ],
+    ),
     untilNow: t("↓ until now", "↓ jusqu'à présent"),
   },
 
