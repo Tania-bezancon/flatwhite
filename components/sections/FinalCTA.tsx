@@ -178,12 +178,6 @@ export function FinalCTA() {
             <FooterLink href="https://www.linkedin.com/in/tania-bezancon/">
               linkedin
             </FooterLink>
-            <FooterLink href="https://taniabezancon.netlify.app/en">
-              portfolio
-            </FooterLink>
-            <FooterLink href="https://github.com/Tania-bezancon/flatwhite">
-              github
-            </FooterLink>
           </nav>
         </div>
 
