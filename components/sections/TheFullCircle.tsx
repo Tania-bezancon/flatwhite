@@ -107,6 +107,18 @@ export function TheFullCircle() {
             <span className="text-text-soft">{tl.statement[lang][1]}</span>
           </motion.h3>
 
+          {/* Required illustrative disclosure */}
+          <motion.span
+            key={`tl-illus-${lang}`}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.9, delay: 0.2 }}
+            className="font-mono text-[9px] tracking-[0.28em] uppercase text-text-dim -mt-10 mb-12"
+          >
+            {copy.illustrative.journey[lang]}
+          </motion.span>
+
           <Timeline steps={timelineSteps} />
         </div>
       </div>

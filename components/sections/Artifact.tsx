@@ -42,6 +42,18 @@ export function Artifact() {
           <span className="text-text-soft">{c.statement[lang][1]}</span>
         </motion.h2>
 
+        {/* Required illustrative disclosure */}
+        <motion.span
+          key={`illus-${lang}`}
+          initial={{ opacity: 0, y: 8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.9, delay: 0.2 }}
+          className="font-mono text-[9px] tracking-[0.28em] uppercase text-text-dim -mt-14 mb-14"
+        >
+          {copy.illustrative.data[lang]}
+        </motion.span>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 w-full">
           <GlassCard label={c.card1.label[lang]} delay={0} tilt={-1.5}>
             <div className="flex items-baseline justify-between mb-4">

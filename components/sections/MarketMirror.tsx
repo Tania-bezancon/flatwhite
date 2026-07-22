@@ -110,6 +110,18 @@ export function MarketMirror() {
         <span className="text-text-soft">{c.statement[lang][1]}</span>
       </motion.h2>
 
+      {/* Required illustrative disclosure */}
+      <motion.span
+        key={`illus-${lang}`}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true, amount: 0.4 }}
+        transition={{ duration: 0.9, delay: 0.2 }}
+        className="relative z-10 font-mono text-[9px] tracking-[0.28em] uppercase text-text-dim -mt-8 mb-10"
+      >
+        {copy.illustrative.data[lang]}
+      </motion.span>
+
       {/* The constellation map */}
       <div className="relative w-full max-w-[920px] aspect-[5/4]">
         <ConstellationMap inView={inView} />

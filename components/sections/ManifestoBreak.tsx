@@ -54,10 +54,21 @@ export function ManifestoBreak() {
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: 0.9, delay: 0.2 }}
-          className="font-mono text-[11px] tracking-[0.28em] uppercase text-[var(--sage)] mb-12"
+          className="font-mono text-[11px] tracking-[0.28em] uppercase text-[var(--sage)] mb-4"
         >
           {c.framing[lang]}
         </motion.p>
+
+        {/* Required illustrative disclosure */}
+        <motion.span
+          key={`illus-${lang}`}
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 0.9, delay: 0.3 }}
+          className="font-mono text-[9px] tracking-[0.28em] uppercase text-text-dim mb-12"
+        >
+          {copy.illustrative.interface[lang]}
+        </motion.span>
 
         {/* THE SCAN TERMINAL */}
         <motion.div

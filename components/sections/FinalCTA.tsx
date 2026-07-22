@@ -187,7 +187,47 @@ export function FinalCTA() {
           </nav>
         </div>
 
-        <div className="mt-12 flex items-center justify-between gap-4 font-mono text-[9px] tracking-[0.28em] uppercase text-text-dim/70">
+        {/* Required Sea View Lab disclaimers */}
+        <div
+          className="mt-16 pt-8 border-t flex flex-col gap-4"
+          style={{ borderTopColor: "var(--edge)" }}
+        >
+          <p
+            key={`disc-${lang}`}
+            className="text-text-soft"
+            style={{
+              fontSize: "13px",
+              lineHeight: 1.55,
+              letterSpacing: "-0.005em",
+              maxWidth: "820px",
+            }}
+          >
+            {f.disclaimer[lang]}
+          </p>
+          <p
+            key={`tm-${lang}`}
+            className="text-text-dim"
+            style={{
+              fontSize: "11px",
+              lineHeight: 1.5,
+              letterSpacing: "-0.005em",
+              maxWidth: "820px",
+            }}
+          >
+            {f.trademark[lang]}
+          </p>
+          <a
+            key={`dom-${lang}`}
+            href="https://seaviewlab.com/contact"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-mono text-[10px] tracking-[0.24em] uppercase text-text-dim hover:text-text-soft transition-colors self-start"
+          >
+            {f.domainInquiry[lang]}
+          </a>
+        </div>
+
+        <div className="mt-10 flex items-center justify-between gap-4 font-mono text-[9px] tracking-[0.28em] uppercase text-text-dim/70">
           <span>flatwhite v0.1 · {f.meta[lang]}</span>
           <span key={`made-${lang}`}>{f.made[lang]}</span>
         </div>
